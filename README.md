@@ -1,7 +1,7 @@
 # gha-cache-optimizer
 
 [![ci](https://github.com/moveeeax/gha-cache-optimizer/actions/workflows/ci.yml/badge.svg)](https://github.com/moveeeax/gha-cache-optimizer/actions/workflows/ci.yml)
-[![Go](https://img.shields.io/badge/go-1.22%2B-00ADD8?logo=go&logoColor=white)](https://go.dev)
+[![Go](https://img.shields.io/badge/go-1.26%2B-00ADD8?logo=go&logoColor=white)](https://go.dev)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Lint GitHub Actions workflows for **missing or ineffective dependency caching** — and print the exact `actions/cache` snippet that fixes each one.
@@ -14,7 +14,7 @@ Point it at your workflow directory. For every job it finds a dependency install
 
 ## How it works
 
-Each `*.yml` / `*.yaml` file is parsed with `yaml.v3` into a node tree (so every finding carries a real line number). For each job:
+Each `*.yml` / `*.yaml` file is parsed with `go.yaml.in/yaml/v3` into a node tree (so every finding carries a real line number). For each job:
 
 1. A first pass records whether the job already covers its deps — an explicit `actions/cache` step, or a `setup-*` action with a built-in `cache:` input (`setup-go` caches by default).
 2. A second pass matches `run:` commands against a table of ecosystems (`npm`/`yarn`/`pnpm`, `go`, `pip`/`poetry`, `mvn`, `bundle`). An install with no covering cache is a **`missing-cache`** warning.
@@ -54,11 +54,11 @@ WARN  needs-cache.yml:12  [missing-cache]  job="test" step="Install deps"
   node dependency install with no cache — every run re-downloads from scratch
   suggested fix:
     Either enable the setup action's built-in cache:
-        - uses: actions/setup-node@v4
+        - uses: actions/setup-node@v7
           with:
             cache: npm
       or add an explicit cache step:
-        - uses: actions/cache@v4
+        - uses: actions/cache@v6
           with:
             path: |
               ~/.npm
