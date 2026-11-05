@@ -34,8 +34,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
       - run: npm ci
@@ -54,8 +54,11 @@ jobs:
 	if !strings.Contains(f.Suggestion, "package-lock.json") {
 		t.Fatalf("suggestion missing package-lock.json key:\n%s", f.Suggestion)
 	}
-	if !strings.Contains(f.Suggestion, "actions/cache@v4") {
+	if !strings.Contains(f.Suggestion, "actions/cache@v6") {
 		t.Fatalf("suggestion missing actions/cache snippet:\n%s", f.Suggestion)
+	}
+	if !strings.Contains(f.Suggestion, "actions/setup-node@v7") {
+		t.Fatalf("suggestion missing current setup-node major:\n%s", f.Suggestion)
 	}
 }
 
@@ -64,7 +67,7 @@ func TestSetupNodeWithCacheIsClean(t *testing.T) {
 jobs:
   build:
     steps:
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           cache: npm
       - run: npm ci
@@ -80,7 +83,7 @@ func TestExplicitCacheStepIsClean(t *testing.T) {
 jobs:
   build:
     steps:
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
@@ -99,7 +102,7 @@ func TestUnstableKeyAndNoRestoreKeys(t *testing.T) {
 jobs:
   build:
     steps:
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-static
@@ -132,7 +135,7 @@ func TestGoDefaultCacheIsClean(t *testing.T) {
 jobs:
   build:
     steps:
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: "1.22"
       - run: go build ./...
@@ -164,7 +167,7 @@ func TestPythonPipWarns(t *testing.T) {
 jobs:
   build:
     steps:
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
       - run: pip install -r requirements.txt
 `
 	rep := analyze(t, yml)

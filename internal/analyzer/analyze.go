@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 // ScanDir analyzes every *.yml / *.yaml file directly under dir (the usual
@@ -201,16 +201,16 @@ func checkCacheStep(file, job string, step *yaml.Node) []Finding {
 func cacheSnippet(e ecosystem) string {
 	if e.setupCacheValue != "" {
 		return fmt.Sprintf("Either enable the setup action's built-in cache:\n"+
-			"    - uses: %s@v4\n      with:\n        cache: %s\n"+
+			"    - uses: %s@%s\n      with:\n        cache: %s\n"+
 			"  or add an explicit cache step:\n%s",
-			e.setupAction, e.setupCacheValue, explicitCache(e))
+			e.setupAction, e.setupMajor, e.setupCacheValue, explicitCache(e))
 	}
 	return "Add an actions/cache step before the install:\n" + explicitCache(e)
 }
 
 func explicitCache(e ecosystem) string {
 	var b strings.Builder
-	b.WriteString("    - uses: actions/cache@v4\n")
+	fmt.Fprintf(&b, "    - uses: actions/cache@%s\n", cacheActionMajor)
 	b.WriteString("      with:\n")
 	b.WriteString("        path: |\n")
 	for _, p := range e.cachePaths {
