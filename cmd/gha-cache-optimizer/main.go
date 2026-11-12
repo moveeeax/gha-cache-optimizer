@@ -1,7 +1,10 @@
 // Command gha-cache-optimizer scans GitHub Actions workflow files for missing
-// or ineffective dependency caching and prints ready-to-paste fixes.
+// or ineffective dependency caching and prints ready-to-paste fixes. Two
+// subcommands read a repository's run history instead: cache-report (cache
+// hit rate per workflow, job and key prefix) and cost (estimated runner
+// minutes and cost per workflow, job and matrix leg).
 //
-// Exit codes:
+// Exit codes (lint mode; the subcommands exit 0 or 2):
 //
 //	0  no warnings (info-only findings still allowed)
 //	1  at least one warning-level finding (CI gate)
@@ -11,6 +14,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -21,12 +25,22 @@ func main() {
 	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
 }
 
-func run(args []string, stdout, stderr *os.File) int {
+func run(args []string, stdout, stderr io.Writer) int {
+	if len(args) > 0 {
+		switch args[0] {
+		case "cache-report":
+			return runCacheReport(args[1:], stdout, stderr)
+		case "cost":
+			return runCost(args[1:], stdout, stderr)
+		}
+	}
 	fs := flag.NewFlagSet("gha-cache-optimizer", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 	asJSON := fs.Bool("json", false, "emit JSON instead of text")
 	fs.Usage = func() {
-		fmt.Fprintf(stderr, "usage: gha-cache-optimizer [--json] [PATH ...]\n\n")
+		fmt.Fprintf(stderr, "usage: gha-cache-optimizer [--json] [PATH ...]\n")
+		fmt.Fprintf(stderr, "       gha-cache-optimizer cache-report --repo OWNER/NAME [flags]\n")
+		fmt.Fprintf(stderr, "       gha-cache-optimizer cost --repo OWNER/NAME [flags]\n\n")
 		fmt.Fprintf(stderr, "Scans workflow YAML for missing/ineffective actions/cache config.\n")
 		fmt.Fprintf(stderr, "PATH defaults to .github/workflows. A directory is scanned for *.yml/*.yaml;\n")
 		fmt.Fprintf(stderr, "individual files are scanned directly.\n\n")

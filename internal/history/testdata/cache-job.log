@@ -1,0 +1,48 @@
+﻿2026-10-06T10:00:00.0000000Z Current runner version: '2.330.0'
+2026-10-06T10:00:01.0000000Z ##[group]Run actions/checkout@v7
+2026-10-06T10:00:01.0100000Z with:
+2026-10-06T10:00:01.0200000Z   repository: example/app
+2026-10-06T10:00:01.0300000Z ##[endgroup]
+2026-10-06T10:00:02.0000000Z ##[group]Run actions/setup-go@v7
+2026-10-06T10:00:02.0100000Z with:
+2026-10-06T10:00:02.0200000Z   go-version: 1.27
+2026-10-06T10:00:02.0300000Z   cache: true
+2026-10-06T10:00:02.0400000Z ##[endgroup]
+2026-10-06T10:00:05.5000000Z Cache is not found
+2026-10-06T10:00:06.0000000Z ##[group]Run actions/cache@v6
+2026-10-06T10:00:06.0100000Z with:
+2026-10-06T10:00:06.0200000Z   path: ~/.npm
+2026-10-06T10:00:06.0300000Z   key: Linux-node-0123456789abcdef0123456789abcdef
+2026-10-06T10:00:06.0400000Z   restore-keys: Linux-node-
+2026-10-06T10:00:06.0500000Z   enableCrossOsArchive: false
+2026-10-06T10:00:06.0600000Z ##[endgroup]
+2026-10-06T10:00:07.0000000Z Cache Size: ~120 MB (125829120 B)
+2026-10-06T10:00:09.0000000Z Cache restored successfully
+2026-10-06T10:00:10.0000000Z Cache restored from key: Linux-node-fedcba9876543210fedcba9876543210
+2026-10-06T10:00:10.5000000Z ##[group]Run actions/cache@v6
+2026-10-06T10:00:10.5100000Z with:
+2026-10-06T10:00:10.5200000Z   path: .tool
+2026-10-06T10:00:10.5300000Z   key: tools-v3
+2026-10-06T10:00:10.5400000Z ##[endgroup]
+2026-10-06T10:00:11.5000000Z Cache restored from key: tools-v3
+2026-10-06T10:00:12.0000000Z ##[group]Run actions/setup-node@v7
+2026-10-06T10:00:12.0100000Z with:
+2026-10-06T10:00:12.0200000Z   cache: npm
+2026-10-06T10:00:12.0300000Z ##[endgroup]
+2026-10-06T10:00:14.0000000Z Cache restored from key: node-cache-Linux-x64-npm-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+2026-10-06T10:00:15.0000000Z ##[group]Run npm ci
+2026-10-06T10:00:15.0100000Z npm ci
+2026-10-06T10:00:15.0200000Z shell: /usr/bin/bash -e {0}
+2026-10-06T10:00:15.0300000Z ##[endgroup]
+2026-10-06T10:00:40.0000000Z added 812 packages in 25s
+2026-10-06T10:01:00.0000000Z Post job cleanup.
+2026-10-06T10:01:01.0000000Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, not saving cache.
+2026-10-06T10:01:02.0000000Z Post job cleanup.
+2026-10-06T10:01:02.5000000Z Cache hit occurred on the primary key tools-v3, not saving cache.
+2026-10-06T10:01:03.0000000Z Post job cleanup.
+2026-10-06T10:01:07.0000000Z Cache saved with key: Linux-node-0123456789abcdef0123456789abcdef
+2026-10-06T10:01:08.0000000Z Post job cleanup.
+2026-10-06T10:01:08.1000000Z [command]/usr/bin/tar --posix -cf cache.tzst
+2026-10-06T10:01:11.0000000Z Cache saved with the key: setup-go-Linux-x64-ubuntu24-go-1.27.3-fa195ca750622750c985f6e3afc23f0fbec2d6ba46b222f7d6e25c32942e766e
+2026-10-06T10:01:12.0000000Z Post job cleanup.
+2026-10-06T10:01:12.5000000Z Cleaning up orphan processes
